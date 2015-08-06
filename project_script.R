@@ -58,21 +58,12 @@ names[7] <- "Shots.Off.Target"
 names[9] <- "Total.Successful.Passes"
 names[10] <- "Total.Unsuccessful.Passes"
 
-
-#Creating new
-final.data$p_o <- final.data$Goals / final.data$Chances.Created
-final.data$p_d <- final.data$Goals.Conceded / final.data$Chances.Faced
-
-
 #renaming columns
 names <- names(final.data)
 names[7] <- "Shots.On.Target"
 names[8] <- "Shots.Off.Target"
 names[32] <- "Total.Unsuccessful.Passes"
 names[31] <- "Total.Successful.Passes"
-
-#adding goal difference column
-final.data$Goal.Difference = final.data$Goals - final.data$Goals.Conceded
 
 #reading in file with correct goal numbers
 library(engsoccerdata)
@@ -88,11 +79,23 @@ final.data <- final.data[order(final.data$Date, final.data$Team),]
 final.data$Goals <- ordered_season$hgoal
 final.data$Goals.Conceded <- ordered_season$vgoal
 
+
+#Creating new
+#offense power
+final.data$p_o <- final.data$Goals / final.data$Chances.Created
+
+#defense power
+final.data$p_d <- final.data$Goals.Conceded / final.data$Chances.Faced
+
+#goal difference
+final.data$Goal.Difference <- final.data$Goals - final.data$Goals.Conceded
+
 #write this new data set into a new file
 write.csv(final.data, "summarized_data.csv", row.names = F)
 
 
 #####################################################################################################################
+#final.data <- read.csv("summarized_data.csv")
 
 #split data set in two
 n <- nrow(final.data)
@@ -100,18 +103,3 @@ half.point <- round(nrow(final.data)/2)
 
 train.data <- final.data[1:half.point, ]
 test.data <- final.data[(half.point+1):n, ]
-
-
-
-
-
-
-
-#one year's worth of very detailed data, down to the individual. We plan on aggregating this for team stats
-#multiple years' worth of match data, with only information about goals and home vs. away
-
-#model on a game to game basis
-
-#run simulations to try to predict and compare to the limited data set
-
-#concerns: goal difference range of values narrow
