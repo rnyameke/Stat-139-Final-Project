@@ -7,12 +7,6 @@ data <- read.csv("Premier League 2011-12 Match by Match.csv")
 data$Total.Attempts <- rowSums(data[, c(64:75)])
 
 #choosing variables for analysis
-#sub_data<- subset(data, select = c("Date", "Team", "Opposition", "Venue",
-#                                   "Goals", "Goals.Conceded", "Shots.On.Target.inc.goals", "Blocked.Shots","Total.Successful.Passes.All",
-#                                   "Total.Unsuccessful.Passes.All", "Total.Attempts",
-#                                   "Key.Passes"))
-
-
 sub_data <- subset(data, select = c("Date", "Team", "Opposition", "Venue", "Goals", "Goals.Conceded", "Shots.On.Target.inc.goals",
                                     "Shots.Off.Target.inc.woodwork", "Blocked.Shots", "Total.Successful.Passes.All",
                                     "Total.Unsuccessful.Passes.All", "Assists", "Key.Passes","Successful.Dribbles",
@@ -46,6 +40,7 @@ data.away$Chances.Faced <- data.away$Assists + data.away$Key.Passes
 data.away <- data.away[, c("Date", "Team", "Chances.Faced")]
 names <- names(data.away)
 names[2] <- "Opposition"
+
 names(data.away) <- names
 
 #including Chances.Faced into final.data
@@ -53,17 +48,12 @@ final.data <- merge(final.data, data.away, by = c("Date", "Opposition"))
 
 #renaming columns
 names <- names(final.data)
-names[6] <- "Shots.On.Target"
-names[7] <- "Shots.Off.Target"
-names[9] <- "Total.Successful.Passes"
-names[10] <- "Total.Unsuccessful.Passes"
-
-#renaming columns
-names <- names(final.data)
 names[7] <- "Shots.On.Target"
 names[8] <- "Shots.Off.Target"
-names[32] <- "Total.Unsuccessful.Passes"
-names[31] <- "Total.Successful.Passes"
+names[10] <- "Total.Successful.Passes"
+names[11] <- "Total.Unsuccessful.Passes"
+
+names(final.data) <- names
 
 #reading in file with correct goal numbers
 library(engsoccerdata)
@@ -90,6 +80,9 @@ final.data$p_d <- final.data$Goals.Conceded / final.data$Chances.Faced
 #goal difference
 final.data$Goal.Difference <- final.data$Goals - final.data$Goals.Conceded
 
+#changing an NA to 0 in p_d
+final.data[355,37] = 0
+
 #write this new data set into a new file
 write.csv(final.data, "summarized_data.csv", row.names = F)
 
@@ -97,17 +90,19 @@ write.csv(final.data, "summarized_data.csv", row.names = F)
 #####################################################################################################################
 #final.data <- read.csv("summarized_data.csv")
 
-#changing an NA to 0 in p_d
-final.data[355,40] = 0
+#removing venue and date
+model.data <- subset(final.data, select = -c(Venue, Date, Goals, Goals.Conceded))
 
 #split data set in two
-n <- nrow(final.data)
-half.point <- round(nrow(final.data)/2)
+n <- nrow(model.data)
+half.point <- round(nrow(model.data)/2)
 
-train.data <- final.data[1:half.point, ]
-test.data <- final.data[(half.point+1):n, ]
+train.data <- model.data[1:half.point, ]
+test.data <- model.data[(half.point+1):n, ]
 
 #scientific model
-model0 <- lm(Goal.Difference ~ 1, data = final.data)
+model0 <- lm(Goal.Difference ~ 1, data = train.data)
 summary(model0)
 
+full_model <- lm(Goal.Difference ~ ., data = train.data)
+summary(full_model)
