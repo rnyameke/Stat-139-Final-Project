@@ -104,14 +104,26 @@ test.data <- model.data[(half.point+1):n, ]
 model0 <- lm(Goal.Difference ~ 1, data = train.data)
 summary(model0)
 
-full_model <- lm(Goal.Difference ~ ., data = train.data)
+full_model <- lm(Goal.Difference ~ ., data = train.data[, -2])
 summary(full_model)
 
 #stepwise in backward direction
 back_model <- step(full_model, direction = "backward")
 summary(back_model)
+extractAIC(back_model)
 
 #stepwise in forward direction
 fore_model <- step(model0, direction = "forward", scope = "full_model")
 summary(fore_model)
 
+extractAIC(fore_model)
+
+test.data$predicted <- predict(fore_model, newdata = test.data)
+test.data <- group_by(test.data, Team)
+
+new_data <- summarise_each(test.data, funs(sum))
+test_graph <- ggplot(new_data, aes(x = Team, y = Goal.Difference)) + geom_point()
+test_graph <- test_graph + geom_point(aes(y = predicted, color = "red"))
+
+#VIF
+VIF(fore_model)
