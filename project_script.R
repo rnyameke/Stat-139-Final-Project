@@ -20,7 +20,7 @@ sub_data <- subset(data, select = c("Date", "Team", "Opposition", "Venue", "Goal
                                     "Tackles.Lost", "Total.Clearances", "Blocks", "Interceptions", "Recoveries",
                                     "Total.Fouls.Conceded", "Total.Fouls.Won", "Yellow.Cards", "Red.Cards",
                                     "Saves.Made", "Challenge.Lost", "Team.Formation", 
-                                    "Turnovers", "Dispossessed", "Big.Chances", "Big.Chances.Faced", "Total.Attempts"))
+                                    "Dispossessed", "Total.Attempts"))
 
 #storing the file with desired variables
 write.csv(sub_data, "small_soccer_data.csv", row.names = F)
@@ -97,9 +97,17 @@ write.csv(final.data, "summarized_data.csv", row.names = F)
 #####################################################################################################################
 #final.data <- read.csv("summarized_data.csv")
 
+#changing an NA to 0 in p_d
+final.data[355,40] = 0
+
 #split data set in two
 n <- nrow(final.data)
 half.point <- round(nrow(final.data)/2)
 
 train.data <- final.data[1:half.point, ]
 test.data <- final.data[(half.point+1):n, ]
+
+#scientific model
+model0 <- lm(Goal.Difference ~ 1, data = final.data)
+summary(model0)
+
