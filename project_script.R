@@ -106,3 +106,12 @@ summary(model0)
 
 full_model <- lm(Goal.Difference ~ ., data = train.data)
 summary(full_model)
+
+#stepwise in backward direction
+back_model <- step(full_model, direction = "backward")
+summary(back_model)
+
+#stepwise in forward direction
+fore_model <- step(model0, direction = "forward", scope = "full_model")
+summary(fore_model)
+
