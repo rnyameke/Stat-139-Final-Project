@@ -1,6 +1,6 @@
 #Final project for Statistics 139, Summer 2015
 
-This code is part of a submission for a final project for Statistics S-139: Introduction to Statistical Modeling, offered during Summer 2015 at the Harvard Summer School. The goal of this project was to predict the outcome of a game with goal difference as the response variable (as this is a course in linear regression, not logistic regression) and intuitively selected predictor variables.
+This code is part of a submission for a group final project for Statistics S-139: Introduction to Statistical Modeling, offered during Summer 2015 at the Harvard Summer School. The goal of this project was to predict the outcome of a game with goal difference as the response variable (as this is a course in linear regression, not logistic regression) and intuitively selected predictor variables.
 
 I split the results from the 2011/2012 season of the English Premier league into training and test data sets, with the first half of the season representing the training data set and the second half of the season representing the test data set. I then built two models using stepwise regression in the forward and backward directions.
 
