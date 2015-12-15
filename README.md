@@ -10,3 +10,4 @@ The results of the prediction are then shown with the observed values on a graph
 
 **Next step**: The next step would be to select the predictor variables with a more reliable and robust method, perhaps by including all of them in the initial full model, or using another method such as k-fold cross-validation. As I continue to take courses on multiple regression and machine learning, I should be able to improve on this model.
 
+Visit http://rpubs.com/RNyameke/premleaguepred for an html report
