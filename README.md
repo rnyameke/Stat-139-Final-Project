@@ -9,3 +9,4 @@ I began by creating an intercept-only model and a full model without interaction
 The results of the prediction are then shown with the observed values on a graph to show the differences between the predicted and observed goal difference.
 
 **Next step**: The next step would be to select the predictor variables with a more reliable and robust method, perhaps by including all of them in the initial full model, or using another method such as k-fold cross-validation. As I continue to take courses on multiple regression and machine learning, I should be able to improve on this model.
+
